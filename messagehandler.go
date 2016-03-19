@@ -27,7 +27,7 @@ func HandleMessage(e slack.MessageEvent, rtm *slack.RTM) {
 	}
 	if strings.Contains(e.Text, "price") && channel.Name == "tf2-data" {
 		rtm.SendMessage(rtm.NewOutgoingMessage("Please give me a moment...", channel.ID))
-		CurrencyData := getCurrencyData()
+		CurrencyData := GetCurrencyData()
 		t := time.Now()
 		params := slack.NewPostMessageParameters()
 		//		outgoingMessage := rtm.NewOutgoingMessage("Backpack.tf Data "+t.Format(time.UnixDate), e.Channel)
