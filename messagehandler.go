@@ -4,6 +4,11 @@ import (
 	"github.com/nlopes/slack"
 	"strings"
 	"fmt"
+	"time"
+	"http"
+	"log"
+	"io/ioutil"
+	"encoding/json"
 )
 
 func handleMessage(e slack.MessageEvent, rtm *slack.RTM) {
