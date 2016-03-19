@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 )
 
-func handleMessage(e slack.MessageEvent, rtm *slack.RTM) {
+func HandleMessage(e slack.MessageEvent, rtm *slack.RTM) {
 	//	rtm.SendMessage(rtm.NewOutgoingMessage(fmt.Sprintf("%+v", e), "C0T7WHNHW"))
 	//channels := rtm.GetChannels()
 	channel, _ := rtm.GetChannelInfo(e.Channel)
@@ -167,7 +167,7 @@ type Currency struct {
 	} `json:"response"`
 }
 
-func getCurrencyData() Currency {
+func GetCurrencyData() Currency {
 	var c Currency
 	currencyData, _ := getWebJSON("http://backpack.tf/api/IGetCurrencies/v1/?key=56eaba18dea9e90b24c42c59")
 	if currencyData.statuscode != 200 {
