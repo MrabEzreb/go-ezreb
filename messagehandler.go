@@ -1,14 +1,15 @@
 package ezreb
 
 import (
-	"github.com/nlopes/slack"
-	"strings"
-	"fmt"
-	"time"
-	"net/http"
-	"log"
-	"io/ioutil"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/nlopes/slack"
 )
 
 func HandleMessage(e slack.MessageEvent, rtm *slack.RTM) {
@@ -24,6 +25,17 @@ func HandleMessage(e slack.MessageEvent, rtm *slack.RTM) {
 			greeting = strings.Replace(greeting, "東東", "my", -1)
 			rtm.SendMessage(rtm.NewOutgoingMessage(fmt.Sprintf("Hello %s!", greeting), e.Channel))
 		}
+	}
+	//	if strings.Contains(e.Text, "joke") && ((strings.Contains(e.Text, "tell") || strings.Contains(e.Text, "tell")) || (strings.Contains(e.Text, "say") || strings.Contains(e.Text, "Say"))) {
+	//		res, err := http.Get("http://api.icndb.com")
+	//		if err != nil {
+	//			rtm.SendMessage(rtm.NewOutgoingMessage("ERROR Please see the console", e.Channel))
+	//			return
+	//		}
+
+	//	}
+	if strings.HasSuffix(e.Text, "Yo momma so fat") {
+		rtm.SendMessage(rtm.NewOutgoingMessage(GetYoMomma(), e.Channel))
 	}
 	if strings.Contains(e.Text, "price") && channel.Name == "tf2-data" {
 		rtm.SendMessage(rtm.NewOutgoingMessage("Please give me a moment...", channel.ID))
@@ -87,6 +99,29 @@ func getWebJSON(url string) (webapiJSON, error) {
 	}
 	//fmt.Printf("%s", robots)
 	return apiJSON, nil
+}
+
+type YoMomma struct {
+	Joke string `json:"joke"`
+}
+
+func GetYoMomma() string {
+	var yo YoMomma
+	res, err := http.Get("http://api.yomomma.info/")
+	if err != nil {
+		return "ERROR Please see the console"
+	}
+	robots, err2 := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+	if err2 != nil {
+		return "ERROR Please see the console"
+	}
+	err3 := json.Unmarshal(robots, &yo)
+	if err3 != nil {
+		return "ERROR Please see the console"
+	}
+	joke2 := strings.Split(yo.Joke, "so fat ")[1]
+	return joke2
 }
 
 type Currency struct {
